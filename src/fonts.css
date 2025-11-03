@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'Addis';
+    src: url('./assets/fonts/Addis.ttf') format('truetype');
+  }
+  
+  @font-face {
+    font-family: 'fantuwua';
+    src: url('./assets/fonts/fantuwua.ttf') format('truetype');
+  }
+  
+  @font-face {
+    font-family: 'washrab';
+    src: url('./assets/fonts/washrab.ttf') format('truetype');
+  }
+  
+  @font-face {
+    font-family: 'Entoto';
+    src: url('./assets/fonts/Entoto.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Benaiah';
+    src: url('./assets/fonts/Benaiah.ttf') format('truetype');
+  }
