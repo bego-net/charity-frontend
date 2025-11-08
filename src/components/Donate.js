@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
 
 function Donate() {
   const [showForm, setShowForm] = useState(false);
@@ -13,20 +14,39 @@ function Donate() {
     setCustomAmount("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 🔹 This is just the frontend placeholder.
-    console.log({
-      name: e.target.name.value,
-      email: e.target.email.value,
+  
+    const donationData = {
+      donorName: e.target.name.value,
+      donorEmail: e.target.email.value,
       amount: amount || customAmount,
-      message,
-    });
-
-    alert(`✅ Frontend only: You donated $${amount || customAmount}!`);
-    setShowForm(false);
+    };
+  
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/donate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(donationData),
+      });
+  
+      const data = await res.json();
+  
+      if (data.success && data.checkout_url) {
+        // Save tx_ref to localStorage before redirecting
+        localStorage.setItem("last_tx_ref", data.tx_ref);
+  
+        // Redirect user to Chapa checkout page
+        window.location.href = data.checkout_url;
+      } else {
+        alert("❌ Payment initialization failed. Please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("⚠️ Error connecting to server.");
+    }
   };
+  
 
   return (
     <section

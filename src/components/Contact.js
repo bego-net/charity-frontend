@@ -1,32 +1,49 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import emailjs from "emailjs-com";
 import "bootstrap/dist/css/bootstrap.min.css";
-import crossImage from "../assets/mekaneeyesus.png"; // adjust path if needed
+import crossImage from "../assets/mekaneeyesus.png";
 
 function Contact() {
-  const form = useRef();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
-  const sendEmail = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    emailjs
-      .sendForm(
-        "service_i81pe54", // 🔹 Replace with your EmailJS service ID
-        "template_7whsnui", // 🔹 Replace with your EmailJS template ID
-        form.current,
-        "W03jOl3lFoQj-Vqpq" // 🔹 Replace with your EmailJS public key
-      )
-      .then(
-        () => {
-          alert("✅ Message Sent Successfully!");
-          e.target.reset();
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        (error) => {
-          alert("❌ Failed to send message. Please try again later.");
-          console.error(error);
-        }
-      );
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("✅ Message sent successfully!");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        alert("❌ Failed to send message. Please try again later.");
+        console.error("Server error:", data);
+      }
+    } catch (error) {
+      console.error("❌ Network error:", error);
+      alert("❌ Failed to send message. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,12 +63,15 @@ function Contact() {
     >
       <h2
         className="fw-bold mb-5"
-        style={{ fontFamily:"'fantuwua','serif'",color: "#10a37f", fontSize: "2.5rem" }}
+        style={{
+          fontFamily: "'fantuwua','serif'",
+          color: "#10a37f",
+          fontSize: "2.5rem",
+        }}
       >
         Contact Us
       </h2>
 
-      {/* Contact Info Section */}
       <div className="mb-5">
         <p>
           <strong>Email:</strong>{" "}
@@ -81,42 +101,29 @@ function Contact() {
         </p>
       </div>
 
-      {/* Social Media Links */}
-      <div className="d-flex gap-4 mb-5">
-        <motion.a
-          href="https://t.me/yabatubrukan"
-          whileHover={{ scale: 1.2 }}
-          style={{ color: "#0088cc", fontSize: "1.8rem" }}
-        >
-          <i className="bi bi-telegram"></i>
-        </motion.a>
-        <motion.a
-          href="https://facebook.com"
-          whileHover={{ scale: 1.2 }}
-          style={{ color: "#1877F2", fontSize: "1.8rem" }}
-        >
-          <i className="bi bi-facebook"></i>
-        </motion.a>
-        <motion.a
-          href="https://twitter.com"
-          whileHover={{ scale: 1.2 }}
-          style={{ color: "#000000", fontSize: "1.8rem" }}
-        >
-          <i className="bi bi-twitter"></i>
-        </motion.a>
-        <motion.a
-          href="https://instagram.com"
-          whileHover={{ scale: 1.2 }}
-          style={{ color: "#E4405F", fontSize: "1.8rem" }}
-        >
-          <i className="bi bi-instagram"></i>
-        </motion.a>
-      </div>
+      {/* Social Media Icons */}
+      <div className="d-flex justify-content-center gap-4 mb-4">
+          {/* Telegram Icon */}
+          <motion.a
+            href="https://t.me/yabatubrukan"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            style={{
+              color: "#0088cc",
+              fontSize: "2rem",
+              textDecoration: "none",
+              transition: "color 0.3s ease",
+            }}
+          >
+            <i className="bi bi-telegram"></i>
+          </motion.a>
+        
+        </div>
 
-      {/* Message Form */}
       <motion.form
-        ref={form}
-        onSubmit={sendEmail}
+        onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -134,9 +141,11 @@ function Contact() {
           <label className="form-label">Full Name</label>
           <input
             type="text"
-            name="user_name"
+            name="name"
             className="form-control bg-transparent text-white"
             placeholder="Your Name"
+            value={formData.name}
+            onChange={handleChange}
             required
           />
         </div>
@@ -145,9 +154,11 @@ function Contact() {
           <label className="form-label">Email</label>
           <input
             type="email"
-            name="user_email"
+            name="email"
             className="form-control bg-transparent text-white"
             placeholder="your@email.com"
+            value={formData.email}
+            onChange={handleChange}
             required
           />
         </div>
@@ -159,12 +170,15 @@ function Contact() {
             className="form-control bg-transparent text-white"
             rows="4"
             placeholder="Write your message..."
+            value={formData.message}
+            onChange={handleChange}
             required
           ></textarea>
         </div>
 
         <motion.button
           type="submit"
+          disabled={loading}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           style={{
@@ -178,56 +192,54 @@ function Contact() {
             width: "100%",
           }}
         >
-          Send Message
+          {loading ? "Sending..." : "Send Message"}
         </motion.button>
       </motion.form>
 
-      {/* Cross Image and Text */}
-<div
-  className="mt-5 text-center"
-  style={{
-    background: "rgba(255, 255, 255, 0.05)",
-    backdropFilter: "blur(10px)",
-    borderRadius: "30px", 
-    padding: "30px 20px",
-    width: "fit-content",
-    margin: "50px auto 0 auto",
-    boxShadow: "0 0 15px #8eeea",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
-  }}
->
-  <motion.img
-    src={crossImage}
-    alt="Cross Symbol"
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.8 }}
-    style={{
-      width: "300px", 
-      height: "auto",
-      marginBottom: "10px",
-      filter:
-        "drop-shadow(0 0 20px rgba(16,163,127,0.7)) drop-shadow(0 0 40px rgba(16,163,127,0.5))",
-      borderRadius: "20px", // ⬅️ Curves on the image itself
-    }}
-  />
-  <motion.h4
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 1.2 }}
-    style={{
-      color: "#8ceeff",
-      fontWeight: "bold",
-      letterSpacing: "2px",
-      textShadow: "0 0 8px #fff",
-      fontSize: "1.5rem",
-      marginTop: "15px",
-    }}
-  >
-   ቤቴል መካነ ኢየሱስ ሆሳዕና
-  </motion.h4>
-</div>
-
+      <div
+        className="mt-5 text-center"
+        style={{
+          background: "rgba(255, 255, 255, 0.05)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "30px",
+          padding: "30px 20px",
+          width: "fit-content",
+          margin: "50px auto 0 auto",
+          boxShadow: "0 0 15px #8eeea",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+        }}
+      >
+        <motion.img
+          src={crossImage}
+          alt="Cross Symbol"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          style={{
+            width: "300px",
+            height: "auto",
+            marginBottom: "10px",
+            filter:
+              "drop-shadow(0 0 20px rgba(16,163,127,0.7)) drop-shadow(0 0 40px rgba(16,163,127,0.5))",
+            borderRadius: "20px",
+          }}
+        />
+        <motion.h4
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2 }}
+          style={{
+            color: "#8ceeff",
+            fontWeight: "bold",
+            letterSpacing: "2px",
+            textShadow: "0 0 8px #fff",
+            fontSize: "1.5rem",
+            marginTop: "15px",
+          }}
+        >
+          ቤቴል መካነ ኢየሱስ ሆሳዕና
+        </motion.h4>
+      </div>
     </section>
   );
 }

@@ -1,10 +1,8 @@
-// src/App.js
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./fonts.css";
-
 
 // Components
 import Navbar from "./components/Navbar";
@@ -25,7 +23,6 @@ function App() {
       <Navbar />
 
       <Routes>
-        {/* ✅ Home Page (contains everything) */}
         <Route
           path="/"
           element={
@@ -43,11 +40,12 @@ function App() {
           }
         />
 
-        {/* ✅ Optional: Separate pages if you want to navigate directly */}
         <Route path="/about" element={<About />} />
         <Route path="/events" element={<EventsSection />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/contact" element={<Contact />} />
+
+       
       </Routes>
 
       <Footer />
