@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
 
 function Donate() {
   const [showForm, setShowForm] = useState(false);

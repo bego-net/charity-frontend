@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -11,7 +11,7 @@ function EventsSection() {
     {
       title: "የተማሪዎች ምርቃት ",
       image: "/images/event2.jpg",
-      },
+    },
     {
       title: "የተማሪዎች ምርቃት ",
       image: "/images/event3.jpg",
@@ -21,38 +21,30 @@ function EventsSection() {
       image: "/images/event4.jpg",
       description:
         "ከተለያዩ ቦታዎች ለመጡ ስደተኞች የመኖሪያ ቤት እና አስፈላጊውን ነገር በመዘጋጀት ላይ",
-      
     },
     {
       title: "Fundraising ",
       image: "/images/event6.jpg",
-      description:
-        "ዕቃዎች በመሸጥ ለሕብረቱ ገቢ በማሰባሰብ ላይ",
-       
+      description: "ዕቃዎች በመሸጥ ለሕብረቱ ገቢ በማሰባሰብ ላይ",
     },
     {
       title: "Fundraising ",
       image: "/images/event7.jpg",
-      description:
-        "ጫማ በመጥረግ ለሕብረቱ ገቢ በማሰባሰብ ላይ",
+      description: "ጫማ በመጥረግ ለሕብረቱ ገቢ በማሰባሰብ ላይ",
     },
-    
     {
       title: "ሆስፒታል ",
       image: "/images/event8.jpg",
-      description:
-        "ለህሙማን በመፀለይ እና የተለያዩ ድጋፎችን በማድረግ ",
+      description: "ለህሙማን በመፀለይ እና የተለያዩ ድጋፎችን በማድረግ ",
     },
     {
       title: "የበዓል ዝግጅት",
       image: "/images/event9.jpg",
-     },
-   
+    },
     {
       title: "ማረሚያ ቤት",
       image: "/images/event10.jpg",
-      description:
-        "በማረሚያ የሚገኙትን ወገኖች በመጠየቅ በመጠየቅ",
+      description: "በማረሚያ የሚገኙትን ወገኖች በመጠየቅ በመጠየቅ",
     },
     {
       title: "የገና በአል",
@@ -60,23 +52,30 @@ function EventsSection() {
       description:
         "የሕብረቱ አባላት በዓልን ከተቸገሩ ወገኖች ጋር ለማክበር ሲሰባሰቡ",
     },
-    
   ];
 
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
-  const handleNext = () => setIndex((prev) => (prev + 1) % events.length);
-  const handlePrev = () => setIndex((prev) => (prev - 1 + events.length) % events.length);
+  // ✅ useCallback ensures handleNext doesn’t trigger extra renders
+  const handleNext = useCallback(
+    () => setIndex((prev) => (prev + 1) % events.length),
+    [events.length]
+  );
 
-  // Auto slide every 4 seconds
+  const handlePrev = useCallback(
+    () => setIndex((prev) => (prev - 1 + events.length) % events.length),
+    [events.length]
+  );
+
+  // ✅ Fixed useEffect dependencies (no ESLint warning now)
   useEffect(() => {
     if (paused) return;
     const interval = setInterval(() => {
       handleNext();
     }, 4000);
     return () => clearInterval(interval);
-  }, [paused, index]);
+  }, [paused, handleNext]);
 
   return (
     <section
@@ -165,7 +164,7 @@ function EventsSection() {
                   }}
                 />
 
-                {/* Glowing light border (hover effect) */}
+                {/* Glowing border on hover */}
                 <div
                   className="glow-border"
                   style={{
