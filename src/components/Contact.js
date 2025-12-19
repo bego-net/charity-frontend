@@ -96,7 +96,15 @@ function Contact() {
         <p>
           <strong>Phone:</strong>{" "}
           <span style={{ color: "#10a37f" }}>
-            +251938665914 / +251912243342
+            +251938665914 / +251912243342 <br/> +251912243188
+          </span>
+        </p>
+
+        <p>
+          <strong>Awash Bank Account:</strong>{" "}
+          <span style={{ color: "#10a37f" }}>
+            01325076451900 <br/>betel mekane eysus
+            
           </span>
         </p>
       </div>
