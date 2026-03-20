@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, Menu, X, Sparkles, Globe, Heart } from "lucide-react";
+import { Sun, Moon, Menu, X, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import logo from "../assets/logo.png";
 
