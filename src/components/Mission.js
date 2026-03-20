@@ -91,7 +91,7 @@ const Mission = () => {
           >
             <Sparkles size={16} className="text-emerald-500 animate-pulse" />
             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500 dark:text-slate-400">
-              {currentLang === 'am' ? "ተልዕኳችን" : "Our Vision"}
+              {currentLang === 'am' ? "ተልዕኳችን" : "Our Mission"}
             </span>
           </motion.div>
           <h2 className="text-5xl lg:text-8xl font-black text-slate-900 dark:text-white tracking-tighter italic">

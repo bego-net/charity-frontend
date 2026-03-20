@@ -1,6 +1,4 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import "./App.css";
 import "./fonts.css";
 
@@ -18,49 +16,59 @@ import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
-// Helper to scroll to top on route change
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-};
-
 function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#05070a] selection:bg-emerald-500/30">
-      <ScrollToTop />
+      
+      {/* Navbar */}
       <Navbar />
 
+      {/* SINGLE PAGE SCROLL CONTENT */}
       <main>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <About />
-                <Mission />
-                <Projects />
-                <Goals />
-                <BibleQuotes />
-                <EventsSection />
-                <Donate />
-                <Testimonials />
-                <Contact />
-              </>
-            }
-          />
 
-          {/* Individual Pages */}
-          <Route path="/about" element={<About />} />
-          <Route path="/events" element={<EventsSection />} />
-          <Route path="/donate" element={<Donate />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        <section id="home">
+          <Hero />
+        </section>
+
+        <section id="about">
+          <About />
+        </section>
+
+        <section id="mission">
+          <Mission />
+        </section>
+
+        <section id="projects">
+          <Projects />
+        </section>
+
+        <section id="goal">
+          <Goals />
+        </section>
+
+        <section id="quotes">
+          <BibleQuotes />
+        </section>
+
+        <section id="events">
+          <EventsSection />
+        </section>
+
+        <section id="donate">
+          <Donate />
+        </section>
+
+        <section id="testimonials">
+          <Testimonials />
+        </section>
+
+        <section id="contact">
+          <Contact />
+        </section>
+
       </main>
 
+      {/* Footer */}
       <Footer />
     </div>
   );

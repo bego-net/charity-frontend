@@ -28,7 +28,7 @@ function Goals() {
             >
               <Target size={16} className="text-emerald-600 dark:text-emerald-400" />
               <span className="text-[10px] uppercase tracking-[0.4em] font-black text-emerald-700 dark:text-emerald-400">
-                {currentLang === 'am' ? "ራዕያችን" : "Our Vision"}
+                {currentLang === 'am' ? "ራዕያችን" : "Our Goals"}
               </span>
             </motion.div>
             
