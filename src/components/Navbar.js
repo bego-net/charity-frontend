@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, Menu, X, Sparkles } from "lucide-react";
+import { Sun, Moon, Menu, X, Sparkles, Globe, Heart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import logo from "../assets/logo.png";
 
@@ -27,6 +27,11 @@ const Navbar = () => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
+  // Lock scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+  }, [isOpen]);
+
   useEffect(() => setIsOpen(false), [location]);
 
   const navLinks = [
@@ -36,34 +41,48 @@ const Navbar = () => {
     { to: "/contact", label: t("navbar.contact") },
   ];
 
+  const menuVariants = {
+    closed: { opacity: 0, x: "100%", transition: { type: "spring", stiffness: 400, damping: 40 } },
+    opened: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 400, damping: 40, staggerChildren: 0.1, delayChildren: 0.2 } }
+  };
+
+  const itemVariants = {
+    closed: { opacity: 0, y: 20 },
+    opened: { opacity: 1, y: 0 }
+  };
+
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? "py-2" : "py-6"}`}>
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? "py-3" : "py-6"}`}>
       <div className="container mx-auto px-4 md:px-12 flex justify-center">
         
-        {/* --- MAIN FLOATING PILL --- */}
-        <div className={`flex items-center justify-between w-full max-w-7xl px-4 md:px-5 py-2.5 rounded-full transition-all duration-500 border shadow-2xl ${
+        <div className={`flex items-center justify-between w-full max-w-7xl px-5 py-2.5 rounded-[2rem] transition-all duration-500 border shadow-2xl ${
           scrolled 
-            ? "bg-[#F4F2F3]/80 dark:bg-[#2C2C2C]/80 backdrop-blur-2xl border-[#C0A9BD]/20 dark:border-[#E4E4E4]/10" 
+            ? "bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-2xl border-slate-200/50 dark:border-white/10" 
             : "bg-transparent border-transparent shadow-none"
         }`}>
 
-          {/* LOGO & DYNAMIC NAME */}
-          <NavLink to="/" className="flex items-center gap-2 md:gap-3 group shrink-0">
+          {/* BRANDING */}
+          <NavLink to="/" className="flex items-center gap-3 group z-[110]">
             <div className="relative">
               <img
                 src={logo}
                 alt="Logo"
-                className="w-8 h-8 md:w-10 md:h-10 rounded-full p-0.5 bg-white/80 dark:bg-white/10 transition-transform group-hover:rotate-12"
+                className="w-9 h-9 md:w-11 md:h-11 rounded-full p-1 bg-white shadow-sm transition-transform group-hover:rotate-12"
               />
-              <div className="absolute inset-0 bg-[#B39CD0] blur-xl opacity-0 group-hover:opacity-20 transition-opacity" />
+              <div className="absolute inset-0 bg-emerald-500 blur-lg opacity-0 group-hover:opacity-20 transition-opacity" />
             </div>
-            <span className="text-sm md:text-lg font-black tracking-tight text-[#64766A] dark:text-[#E4E4E4] max-w-[120px] md:max-w-none truncate">
-              {t("navbar.orgName")}
-            </span>
+            <div className="flex flex-col leading-none">
+              <span className="text-sm md:text-lg font-black tracking-tighter text-slate-900 dark:text-white uppercase font-heading">
+                {t("navbar.orgName")}
+              </span>
+              <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 tracking-[0.2em] uppercase">
+                {i18n.language === 'am' ? "በጎ አድራጎት" : "Charity"}
+              </span>
+            </div>
           </NavLink>
 
-          {/* DESKTOP NAV */}
-          <div className="hidden lg:flex items-center bg-[#C0A9BD]/10 dark:bg-white/5 p-1 rounded-full border border-black/5 dark:border-white/5">
+          {/* DESKTOP LINKS */}
+          <div className="hidden lg:flex items-center bg-slate-100/50 dark:bg-white/5 p-1 rounded-full border border-slate-200/50 dark:border-white/10">
             <ul className="flex items-center gap-1">
               {navLinks.map((link) => (
                 <li key={link.to} className="relative">
@@ -71,8 +90,8 @@ const Navbar = () => {
                     to={link.to}
                     end={link.end}
                     className={({ isActive }) =>
-                      `relative px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 ${
-                        isActive ? "text-[#64766A] dark:text-[#2C2C2C]" : "text-[#64766A]/60 dark:text-[#E4E4E4]/60 hover:text-[#64766A]"
+                      `relative px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${
+                        isActive ? "text-white dark:text-slate-900" : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                       }`
                     }
                   >
@@ -80,9 +99,9 @@ const Navbar = () => {
                       <>
                         {isActive && (
                           <motion.div 
-                            layoutId="active-pill"
-                            className="absolute inset-0 bg-white dark:bg-[#B39CD0] rounded-full shadow-sm -z-10"
-                            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                            layoutId="nav-pill"
+                            className="absolute inset-0 bg-slate-900 dark:bg-white rounded-full -z-10 shadow-lg"
+                            transition={{ type: "spring", stiffness: 350, damping: 30 }}
                           />
                         )}
                         {link.label}
@@ -94,20 +113,26 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* ACTION BUTTONS */}
-          <div className="flex items-center gap-2 md:gap-4">
-            
-            {/* --- LANGUAGE SWITCHER (FIXED) --- */}
-            {/* Added 'hidden sm:flex' - visible on tablets and desktops */}
-            <div className="hidden sm:flex items-center bg-[#C0A9BD]/10 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5">
-              {['am', 'en'].map((lang) => (
+          {/* UTILITIES */}
+          <div className="flex items-center gap-2 z-[110]">
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 transition-all active:scale-90"
+            >
+              {isDark ? <Sun size={20} strokeWidth={2.5} /> : <Moon size={20} strokeWidth={2.5} />}
+            </button>
+
+            {/* Language Switch (Desktop) */}
+            <div className="hidden sm:flex bg-slate-100 dark:bg-white/5 p-1 rounded-full border border-slate-200/50 dark:border-white/10">
+               {['am', 'en'].map((lang) => (
                 <button
                   key={lang}
                   onClick={() => changeLanguage(lang)}
-                  className={`px-3 py-1 text-[10px] font-black rounded-full transition-all ${
+                  className={`px-3 py-1.5 text-[10px] font-black rounded-full transition-all ${
                     i18n.language === lang 
-                      ? "bg-[#64766A] dark:bg-[#B39CD0] text-white dark:text-[#2C2C2C] shadow-md" 
-                      : "text-[#64766A]/40 dark:text-[#E4E4E4]/40 hover:text-[#64766A]"
+                      ? "bg-white dark:bg-emerald-500 text-slate-900 dark:text-white shadow-sm" 
+                      : "text-slate-400 hover:text-slate-600"
                   }`}
                 >
                   {lang.toUpperCase()}
@@ -115,75 +140,65 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* THEME TOGGLE */}
-            <button
-              onClick={() => setIsDark(!isDark)}
-              className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-[#64766A] dark:text-[#E4E4E4] transition-all active:scale-90"
+            {/* Mobile Menu Button */}
+            <button 
+              className={`lg:hidden p-2.5 rounded-2xl transition-all ${isOpen ? 'bg-emerald-500 text-white shadow-emerald-500/40 rotate-90' : 'bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white'}`}
+              onClick={() => setIsOpen(!isOpen)}
             >
-              {isDark ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
-            </button>
-
-            {/* DONATE CTA */}
-            <NavLink to="/donate" className="hidden md:block">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#64766A] dark:bg-[#B39CD0] text-white dark:text-[#2C2C2C] text-xs font-black shadow-lg shadow-[#64766A]/10 dark:shadow-black/20"
-              >
-                <Sparkles size={14} />
-                {t("navbar.donate")}
-              </motion.button>
-            </NavLink>
-
-            {/* MOBILE TOGGLE */}
-            <button className="lg:hidden p-2 text-[#64766A] dark:text-[#E4E4E4]" onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* MOBILE OVERLAY */}
+      {/* MODERN FULL-SCREEN MOBILE OVERLAY */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="lg:hidden fixed inset-x-4 top-24 bg-[#F4F2F3]/95 dark:bg-[#2C2C2C]/95 backdrop-blur-xl rounded-[2.5rem] shadow-2xl border border-[#C0A9BD]/20 dark:border-[#E4E4E4]/10 p-8 z-[101]"
+            variants={menuVariants}
+            initial="closed"
+            animate="opened"
+            exit="closed"
+            className="lg:hidden fixed inset-0 bg-white dark:bg-[#0d0d0d] z-[105] flex flex-col p-8 pt-32"
           >
-            <div className="flex flex-col gap-6 text-center">
+            {/* Decorative Background for Mobile Menu */}
+            <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full" />
+
+            <div className="flex flex-col gap-8 relative z-10">
               {navLinks.map((link) => (
-                <NavLink key={link.to} to={link.to} className="text-2xl font-black text-[#64766A] dark:text-[#E4E4E4]">
-                  {link.label}
-                </NavLink>
+                <motion.div key={link.to} variants={itemVariants}>
+                  <NavLink 
+                    to={link.to} 
+                    className={({ isActive }) => `text-5xl font-black uppercase tracking-tighter transition-colors ${isActive ? 'text-emerald-500' : 'text-slate-900 dark:text-white'}`}
+                  >
+                    {link.label}
+                  </NavLink>
+                </motion.div>
               ))}
               
-              {/* Language toggle inside mobile menu for easy access */}
-              <div className="flex justify-center gap-4 py-4 border-y border-[#64766A]/10 dark:border-white/10">
-                <button 
-                  onClick={() => changeLanguage('am')} 
-                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
-                    i18n.language === 'am' ? 'bg-[#64766A] text-white dark:bg-[#B39CD0] dark:text-[#2C2C2C]' : 'opacity-40'
-                  }`}
-                >
-                  አማርኛ 🇪🇹
-                </button>
-                <button 
-                  onClick={() => changeLanguage('en')} 
-                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
-                    i18n.language === 'en' ? 'bg-[#64766A] text-white dark:bg-[#B39CD0] dark:text-[#2C2C2C]' : 'opacity-40'
-                  }`}
-                >
-                  English 🇬🇧
-                </button>
-              </div>
+              <motion.div variants={itemVariants} className="h-px bg-slate-200 dark:bg-white/10 my-4" />
 
-              <NavLink to="/donate">
-                <button className="w-full py-4 rounded-full bg-[#64766A] dark:bg-[#B39CD0] text-white dark:text-[#2C2C2C] font-black text-lg">
-                  {t("navbar.donate")}
-                </button>
-              </NavLink>
+              {/* Mobile Lang & Action */}
+              <motion.div variants={itemVariants} className="space-y-8">
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2 text-slate-400">
+                    <Globe size={20} />
+                    <span className="text-xs font-black uppercase tracking-widest">{i18n.language === 'am' ? "ቋንቋ ይምረጡ" : "Choose Language"}</span>
+                  </div>
+                  <div className="flex gap-4">
+                    <button onClick={() => changeLanguage('am')} className={`text-xl font-black ${i18n.language === 'am' ? 'text-emerald-500' : 'text-slate-300'}`}>AM</button>
+                    <button onClick={() => changeLanguage('en')} className={`text-xl font-black ${i18n.language === 'en' ? 'text-emerald-500' : 'text-slate-300'}`}>EN</button>
+                  </div>
+                </div>
+
+                <NavLink to="/donate" className="block">
+                  <button className="w-full py-6 rounded-[2rem] bg-emerald-600 text-white font-black text-xl flex items-center justify-center gap-3 shadow-xl shadow-emerald-600/20 active:scale-95 transition-transform">
+                    <Heart size={24} fill="white" />
+                    {t("navbar.donate")}
+                  </button>
+                </NavLink>
+              </motion.div>
             </div>
           </motion.div>
         )}

@@ -7,26 +7,53 @@
 @layer base {
   :root {
     /* BRIGHT MODE: Lavender Aroma */
-    --bg-main: #F4F2F3;      /* Off-white/Lavender Tint */
-    --text-main: #64766A;    /* Deep Sage Green (Good for readability) */
-    --accent-1: #C0A9BD;    /* Muted Purple */
-    --accent-2: #94A7AE;    /* Muted Blue-Gray */
-    --cta: #64766A;         /* Deep Green for buttons */
+    --bg-main: #F4F2F3;
+    --text-main: #64766A;
+    --accent-1: #C0A9BD;
+    --accent-2: #94A7AE;
+    --cta: #64766A;
   }
 
   .dark {
     /* DARK MODE: Muted Pastels */
-    --bg-main: #2C2C2C;      /* Slate Gray */
-    --text-main: #E4E4E4;    /* Light Gray */
-    --accent-1: #A8DADC;    /* Light Cyan */
-    --accent-2: #FFC1CC;    /* Soft Pink */
-    --cta: #B39CD0;         /* Lavender */
+    --bg-main: #0D0D0D; /* Slightly deeper dark for better premium feel */
+    --text-main: #E4E4E4;
+    --accent-1: #A8DADC;
+    --accent-2: #FFC1CC;
+    --cta: #B39CD0;
   }
 
+  /* CRITICAL FIX FOR MOBILE OVERFLOW 
+     These rules prevent the "extra space" on the right side.
+  */
+  html, 
   body {
     @apply transition-colors duration-500;
     background-color: var(--bg-main);
     color: var(--text-main);
     font-family: 'Plus Jakarta Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Prevents horizontal scroll */
+    position: relative;
+  }
+
+  /* Ensure the root React container doesn't overflow */
+  #root {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Helper class for animated sections to prevent them from breaking layout */
+  .section-container {
+    @apply w-full max-w-7xl mx-auto px-6 overflow-hidden;
   }
 }
