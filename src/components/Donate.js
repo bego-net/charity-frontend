@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Heart, X, Send, CreditCard, Sparkles, Landmark, AlertCircle, Copy } from "lucide-react";
+import { Heart, X, Send,  Sparkles, Landmark, AlertCircle } from "lucide-react";
 
 function Donate() {
   const { i18n } = useTranslation();
@@ -10,12 +10,10 @@ function Donate() {
   const [showForm, setShowForm] = useState(false);
   const [showBankInfo, setShowBankInfo] = useState(false); // New state for bank info
   const [amount, setAmount] = useState("");
-  const [customAmount, setCustomAmount] = useState("");
-  const [message, setMessage] = useState("");
+  
 
   const handlePresetClick = (value) => {
     setAmount(value);
-    setCustomAmount("");
   };
 
   const handleSubmit = (e) => {

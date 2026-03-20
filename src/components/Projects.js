@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Sparkles, Info, ChevronUp, Plus } from "lucide-react";
+import { Sparkles, Info, ChevronUp, Plus } from "lucide-react";
 
 import project1 from "../assets/gallery/project1.jpg";
 import project2 from "../assets/gallery/project2.jpg";
