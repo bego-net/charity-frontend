@@ -18,7 +18,25 @@
     src: url('./assets/fonts/Entoto.ttf') format('truetype');
   }
 
+  
   @font-face {
-    font-family: 'Benaiah';
-    src: url('./assets/fonts/Benaiah.ttf') format('truetype');
-  }
+  font-family: 'Benaiah';
+  src: url('./assets/fonts/Benaiah.ttf') format('truetype');
+  font-display: swap;
+}
+
+.font-amharic {
+  font-family: 'Benaiah', sans-serif !important;
+}
+.font-english {
+  font-family: 'Benaiah', sans-serif !important;
+}
+/* ... your existing @font-face rules ... */
+
+.font-heading {
+  font-family: 'washrab', sans-serif !important;
+}
+
+.font-subheading {
+  font-family: 'Benaiah', sans-serif !important;
+}

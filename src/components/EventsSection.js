@@ -1,250 +1,222 @@
-import React, { useState, useEffect, useCallback } from "react";
+﻿import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useTranslation } from "react-i18next";
+import { ChevronLeft, ChevronRight, Calendar, Sparkles } from "lucide-react";
 
 function EventsSection() {
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+
   const events = [
     {
-      title: "የበዓል ድጋፍ",
+      title: { am: "የበዓል ድጋፍ", en: "Holiday Support" },
       image: "/images/event1.jpg",
+      description: { 
+        am: "በበዓላት ወቅት ለተቸገሩ ወገኖች የምናደርገው ልዩ ድጋፍ", 
+        en: "Providing specialized support to those in need during festive seasons." 
+      },
     },
     {
-      title: "የተማሪዎች ምርቃት ",
+      title: { am: "የተማሪዎች ምርቃት", en: "Students Graduation" },
       image: "/images/event2.jpg",
+      description: { 
+        am: "የተማሪዎቻችንን ስኬት አብረን የምናከብርበት ደማቅ በዓል", 
+        en: "Celebrating the hard-earned success of our community students." 
+      },
     },
     {
-      title: "የተማሪዎች ምርቃት ",
-      image: "/images/event3.jpg",
-    },
-    {
-      title: "እንግዶችን በመቀበል ",
+      title: { am: "እንግዶችን መቀበል", en: "Welcoming Guests" },
       image: "/images/event4.jpg",
-      description:
-        "ከተለያዩ ቦታዎች ለመጡ ስደተኞች የመኖሪያ ቤት እና አስፈላጊውን ነገር በመዘጋጀት ላይ",
+      description: { 
+        am: "ከተለያዩ ቦታዎች ለመጡ ስደተኞች የመኖሪያ ቤት እና አስፈላጊውን ነገር ማዘጋጀት", 
+        en: "Arranging housing and basic necessities for arriving refugees." 
+      },
     },
     {
-      title: "Fundraising ",
+      title: { am: "ገቢ ማሰባሰቢያ", en: "Fundraising Drive" },
       image: "/images/event6.jpg",
-      description: "ዕቃዎች በመሸጥ ለሕብረቱ ገቢ በማሰባሰብ ላይ",
+      description: { 
+        am: "ዕቃዎች በመሸጥ ለሕብረቱ ገቢ በማሰባሰብ ላይ የሚደረግ ጥረት", 
+        en: "Community efforts to raise funds through charity sales and events." 
+      },
     },
     {
-      title: "Fundraising ",
-      image: "/images/event7.jpg",
-      description: "ጫማ በመጥረግ ለሕብረቱ ገቢ በማሰባሰብ ላይ",
-    },
-    {
-      title: "ሆስፒታል ",
+      title: { am: "የሆስፒታል ጉብኝት", en: "Hospital Ministry" },
       image: "/images/event8.jpg",
-      description: "ለህሙማን በመፀለይ እና የተለያዩ ድጋፎችን በማድረግ ",
+      description: { 
+        am: "ለህሙማን በመፀለይ እና የተለያዩ ድጋፎችን በማድረግ አብሮነታችንን የምንገልጽበት", 
+        en: "Showing solidarity through prayer and support for the hospitalized." 
+      },
     },
     {
-      title: "የበዓል ዝግጅት",
-      image: "/images/event9.jpg",
-    },
-    {
-      title: "ማረሚያ ቤት",
-      image: "/images/event10.jpg",
-      description: "በማረሚያ የሚገኙትን ወገኖች በመጠየቅ በመጠየቅ",
-    },
-    {
-      title: "የገና በአል",
+      title: { am: "የገና በአል", en: "Christmas Celebration" },
       image: "/images/event11.jpg",
-      description:
-        "የሕብረቱ አባላት በዓልን ከተቸገሩ ወገኖች ጋር ለማክበር ሲሰባሰቡ",
+      description: { 
+        am: "የሕብረቱ አባላት በዓልን ከተቸገሩ ወገኖች ጋር ለማክበር ሲሰባሰቡ", 
+        en: "Members gathering to celebrate the holidays with the underprivileged." 
+      },
     },
   ];
 
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(0); // -1 for left, 1 for right
   const [paused, setPaused] = useState(false);
 
-  // ✅ useCallback ensures handleNext doesn’t trigger extra renders
-  const handleNext = useCallback(
-    () => setIndex((prev) => (prev + 1) % events.length),
-    [events.length]
-  );
+  const handleNext = useCallback(() => {
+    setDirection(1);
+    setIndex((prev) => (prev + 1) % events.length);
+  }, [events.length]);
 
-  const handlePrev = useCallback(
-    () => setIndex((prev) => (prev - 1 + events.length) % events.length),
-    [events.length]
-  );
+  const handlePrev = useCallback(() => {
+    setDirection(-1);
+    setIndex((prev) => (prev - 1 + events.length) % events.length);
+  }, [events.length]);
 
-  // ✅ Fixed useEffect dependencies (no ESLint warning now)
   useEffect(() => {
     if (paused) return;
-    const interval = setInterval(() => {
-      handleNext();
-    }, 4000);
+    const interval = setInterval(handleNext, 6000);
     return () => clearInterval(interval);
   }, [paused, handleNext]);
 
-  return (
-    <section
-      id="events"
-      className="py-5"
-      style={{
-        backgroundColor: "#0b032d",
-        color: "white",
-        position: "relative",
-        overflow: "hidden",
-        minHeight: "100vh",
-      }}
-    >
-      <div className="container text-center">
-        <h2
-          className="fw-bold mb-5"
-          style={{
-            fontFamily: "'fantuwua','Playfair Display', serif",
-            color: "#10a37f",
-            fontSize: "2.5rem",
-          }}
-        >
-          ማስታወሻዎች<br />
-          <span style={{ color: "#fff" }}>Events</span>
-        </h2>
+  // Framer Motion Variants for Modern Slide + Fade
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? "20%" : "-20%",
+      opacity: 0,
+      filter: "blur(10px)",
+      scale: 1.1
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      filter: "blur(0px)",
+      scale: 1,
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    },
+    exit: (direction) => ({
+      x: direction > 0 ? "-20%" : "20%",
+      opacity: 0,
+      filter: "blur(10px)",
+      scale: 0.9,
+      transition: { duration: 0.6 }
+    })
+  };
 
-        <div
-          className="position-relative d-flex justify-content-center align-items-center"
-          style={{ height: "500px" }}
-        >
-          <AnimatePresence mode="wait">
+  return (
+    <section id="events" className="relative py-24 bg-white dark:bg-[#05070a] transition-colors duration-700 overflow-hidden">
+      
+      <div className="container mx-auto px-6 relative z-10">
+        
+        {/* Header - Consistent with Goals Section */}
+        <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6"
+          >
+            <Sparkles size={16} className="text-emerald-600 dark:text-emerald-400" />
+            <span className="text-[10px] uppercase tracking-[0.4em] font-black text-emerald-700 dark:text-emerald-400">
+              {currentLang === 'am' ? "ማስታወሻዎች" : "Our Gallery"}
+            </span>
+          </motion.div>
+          <h2 className="text-4xl lg:text-6xl font-black text-slate-900 dark:text-white">
+            {currentLang === 'am' ? "የማህበረሰብ እንቅስቃሴዎች" : "Recent Events"}
+          </h2>
+        </div>
+
+        {/* Cinematic Slider Container */}
+        <div className="relative max-w-6xl mx-auto h-[500px] md:h-[650px] group">
+          
+          <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={index}
-              initial={{ rotateY: 90, opacity: 0 }}
-              animate={{
-                rotateY: 0,
-                opacity: 1,
-                scale: paused ? 1.05 : 1,
-                boxShadow: paused
-                  ? "0 0 2px 2px #eeeeee, 0 0 10px 5px #eeeeee"
-                  : "0 20px 40px rgba(0,0,0,0.4)",
-                transition: { duration: 0.8, ease: "easeOut" },
-              }}
-              exit={{
-                rotateY: -90,
-                opacity: 0,
-                transition: { duration: 0.6, ease: "easeIn" },
-              }}
-              style={{
-                transformStyle: "preserve-3d",
-                perspective: 1000,
-                borderRadius: "25px",
-                overflow: "hidden",
-                width: "80%",
-                maxWidth: "800px",
-                background: "rgba(255,255,255,0.05)",
-                cursor: "pointer",
-                position: "absolute",
-                transition: "all 0.4s ease",
-              }}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               onMouseEnter={() => setPaused(true)}
               onMouseLeave={() => setPaused(false)}
-              onClick={() => setPaused(!paused)}
+              className="absolute inset-0 w-full h-full rounded-[3.5rem] overflow-hidden shadow-2xl border border-slate-100 dark:border-white/5"
             >
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  height: "400px",
-                  overflow: "hidden",
-                  borderRadius: "25px",
-                }}
-              >
-                <img
-                  src={events[index].image}
-                  alt={events[index].title}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    transition: "transform 0.6s ease",
-                    transform: paused ? "scale(1.1)" : "scale(1)",
-                    filter: paused
-                      ? "brightness(1.1) saturate(1.2)"
-                      : "brightness(0.9)",
-                  }}
-                />
+              {/* The Image with "Ken Burns" subtle zoom */}
+              <motion.img
+                initial={{ scale: 1.2 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 10, ease: "linear" }}
+                src={events[index].image}
+                alt={events[index].title[currentLang]}
+                className="w-full h-full object-cover"
+              />
 
-                {/* Glowing border on hover */}
-                <div
-                  className="glow-border"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "25px",
-                    boxShadow: paused
-                      ? "0 0 25px 5px #ff4d4d, 0 0 50px 15px #ff4d4d"
-                      : "none",
-                    transition: "all 0.4s ease",
-                    pointerEvents: "none",
-                  }}
-                ></div>
-              </div>
+              {/* Sophisticated Dark Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-90" />
 
-              <div className="p-4">
-                <h4 style={{ color: "#10a37f", fontWeight: "bold" }}>
-                  {events[index].title}
-                </h4>
-                <p style={{ color: "#ddd", fontSize: "1rem" }}>
-                  {events[index].description}
-                </p>
+              {/* Text Content Reveal */}
+              <div className="absolute bottom-0 left-0 p-10 md:p-20 w-full">
+                <motion.div
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="space-y-4"
+                >
+                  <div className="flex items-center gap-3 text-emerald-400 font-bold tracking-widest text-xs uppercase">
+                    <Calendar size={16} />
+                    <span>{currentLang === 'am' ? "መጋቢት 2018" : "March 2026"}</span>
+                  </div>
+                  
+                  <h3 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight">
+                    {events[index].title[currentLang]}
+                  </h3>
+                  
+                  <p className="text-slate-300 text-lg md:text-xl max-w-2xl font-medium leading-relaxed">
+                    {events[index].description[currentLang]}
+                  </p>
+                </motion.div>
               </div>
             </motion.div>
           </AnimatePresence>
 
-          {/* Left Button */}
-          <button
-            onClick={handlePrev}
-            style={{
-              position: "absolute",
-              left: "2%",
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid #444",
-              borderRadius: "50%",
-              color: "#10a37f",
-              width: "50px",
-              height: "50px",
-              fontSize: "1.5rem",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) =>
-              (e.target.style.background = "rgba(255,255,255,0.2)")
-            }
-            onMouseLeave={(e) =>
-              (e.target.style.background = "rgba(255,255,255,0.1)")
-            }
-          >
-            ‹
-          </button>
+          {/* Navigation Arrows - Glassmorphism style */}
+          <div className="absolute top-1/2 -translate-y-1/2 left-4 md:-left-10 right-4 md:-right-10 flex justify-between pointer-events-none">
+            <button
+              onClick={handlePrev}
+              className="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl flex items-center justify-center hover:bg-emerald-600 hover:border-emerald-600 transition-all active:scale-90"
+            >
+              <ChevronLeft size={32} />
+            </button>
+            <button
+              onClick={handleNext}
+              className="pointer-events-auto w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl flex items-center justify-center hover:bg-emerald-600 hover:border-emerald-600 transition-all active:scale-90"
+            >
+              <ChevronRight size={32} />
+            </button>
+          </div>
+        </div>
 
-          {/* Right Button */}
-          <button
-            onClick={handleNext}
-            style={{
-              position: "absolute",
-              right: "2%",
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid #444",
-              borderRadius: "50%",
-              color: "#10a37f",
-              width: "50px",
-              height: "50px",
-              fontSize: "1.5rem",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) =>
-              (e.target.style.background = "rgba(255,255,255,0.2)")
-            }
-            onMouseLeave={(e) =>
-              (e.target.style.background = "rgba(255,255,255,0.1)")
-            }
-          >
-            ›
-          </button>
+        {/* Visual Pagination */}
+        <div className="flex justify-center gap-4 mt-12">
+          {events.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setDirection(i > index ? 1 : -1);
+                setIndex(i);
+              }}
+              className={`group relative h-1.5 rounded-full transition-all duration-500 overflow-hidden ${
+                i === index ? "w-16 bg-emerald-500" : "w-4 bg-slate-200 dark:bg-slate-800"
+              }`}
+            >
+              {i === index && (
+                <motion.div 
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "0%" }}
+                  transition={{ duration: 6, ease: "linear" }}
+                  className="absolute inset-0 bg-white/30"
+                />
+              )}
+            </button>
+          ))}
         </div>
       </div>
     </section>

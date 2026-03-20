@@ -1,0 +1,21 @@
+{
+  "navbar": {
+    "orgName": "Yabatu Brukan",
+    "home": "Home",
+    "about": "About",
+    "events": "Events",
+    "contact": "Contact",
+    "donate": "Donate"
+  },
+
+ "hero": {
+    "tagline": "Sharing the Father's Love",
+    "title": "Blessed of the Father",
+    "subtitle": "Charity Fellowship",
+    "verse": "“Come, you who are blessed by my Father; take your inheritance... For I was hungry and you gave me something to eat, I was thirsty and you gave me something to drink...”",
+    "ref": "Matthew 25:34",
+    "cta": "Donate Now",
+    "mission": "Our Mission",
+    "donors": "Active Donors"
+  }
+}

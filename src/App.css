@@ -1,119 +1,27 @@
-/* 🌟 GENERAL STYLES */
-body {
-  background-color: #0d1117; /* Modern dark base like ChatGPT */
-  background-size: cover;
-  background-attachment: fixed;
-  color: #e6edf3; /* Softer white text */
-  margin: 0;
-  padding: 0;
-  font-family: "Poppins", sans-serif;
-  padding-top: 80px;
-  
-}
-
-/* ✨ Remove the heavy dark overlay and replace with subtle depth */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(13, 17, 23, 0.4); /* Gentle depth overlay */
-  z-index: -1;
-}
-
-section {
-  background: transparent !important;
-  color: #e6edf3;
-}
-
-html {
+﻿html {
   scroll-behavior: smooth;
 }
 
-/* Center alignment for general App container */
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box;
 }
 
-/* Optional: React logo animation (safe to keep or delete) */
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+section {
+  scroll-margin-top: 96px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.section-space {
+  padding: 5rem 0;
 }
 
-/* 🔳 HEADER (if used) */
-.App-header {
-  background-color: #161b22; /* slightly lighter dark for sections */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: #e6edf3;
-}
-
-/* 🔗 LINKS */
-.App-link {
-  color: #58a6ff; /* modern link blue like GitHub/ChatGPT */
-  text-decoration: none;
-}
-
-.App-link:hover {
-  text-decoration: underline;
-}
-
-/* 🌈 BUTTON GLOW EFFECT */
-.btn-danger {
-  transition: all 0.3s ease;
-}
-
-.btn-danger:hover {
-  box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
-  transform: scale(1.05);
-}
-
-/* 📱 RESPONSIVE DESIGN */
 @media (max-width: 768px) {
-  h1.display-3 {
-    font-size: 2rem !important;
+  .section-space {
+    padding: 4rem 0;
   }
-
-  .lead {
-    font-size: 1rem !important;
-  }
-
-  button.btn-lg {
-    padding: 10px 20px !important;
-    font-size: 1rem !important;
-  }
-
-  section {
-    padding: 50px 20px !important;
-  }
-}
-.amharic-title {
-  font-family: 'washrab', 'fantuwua', 'Addis', sans-serif;
-  font-size: 5rem;
-  color: #e6edf3;
-}
-.bible-verse {
-  font-family: 'Entoto', 'sans-serif';
-}
-.placeholder {
-color: #A0A0A0;
 }
