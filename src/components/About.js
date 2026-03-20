@@ -70,7 +70,7 @@ function About() {
                   </div>
                   <div className={subFont}>
                     <p className="text-2xl font-black text-slate-900 dark:text-white">2011 <span className="text-sm font-normal">ዓ.ም</span></p>
-                    <p className="text-[10px] text-slate-500 dark:text-emerald-400 uppercase font-bold tracking-widest">{currentLang === 'am' ? "የተመሰረተበት" : "Established"}</p>
+                    <p className="text-[10px] text-slate-500 dark:text-emerald-400 uppercase font-bold tracking-widest">{currentLang === 'am' ? "ተመሰረተ" : "Established"}</p>
                   </div>
                 </div>
               </motion.div>

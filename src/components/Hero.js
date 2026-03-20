@@ -140,10 +140,12 @@ const Hero = () => {
                   ))}
                 </div>
                 <div>
-                  <h4 className={`text-3xl font-black text-slate-900 dark:text-white leading-none ${subFont}`}>Powered by </h4>
-                  <p className={`text-[11px] uppercase font-black text-emerald-600 tracking-tighter mt-1 ${subFont}`}>
-                    {t('hero.donors', 'Kind Hearts ❤️')}
-                  </p>
+                  <h4 className={`text-3xl font-black text-slate-900 dark:text-white leading-none ${subFont}`}>
+  {i18n.language === 'am' ? "በደግ ልቦች" : "Powered by"}
+</h4>
+<p className={`text-[11px] uppercase font-black text-emerald-600 tracking-tighter mt-1 ${subFont}`}>
+  {t('hero.donors', 'Kind Hearts ❤️')}
+</p>
                 </div>
               </motion.div>
             </motion.div>

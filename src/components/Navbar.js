@@ -27,7 +27,6 @@ const Navbar = () => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
-  // Lock scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
   }, [isOpen]);
@@ -55,6 +54,7 @@ const Navbar = () => {
     <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? "py-3" : "py-6"}`}>
       <div className="container mx-auto px-4 md:px-12 flex justify-center">
         
+        {/* MAIN PILL CONTAINER */}
         <div className={`flex items-center justify-between w-full max-w-7xl px-5 py-2.5 rounded-[2rem] transition-all duration-500 border shadow-2xl ${
           scrolled 
             ? "bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-2xl border-slate-200/50 dark:border-white/10" 
@@ -113,9 +113,8 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* UTILITIES */}
+          {/* UTILITIES (Theme Toggle & Mobile Trigger) */}
           <div className="flex items-center gap-2 z-[110]">
-            {/* Theme Toggle */}
             <button
               onClick={() => setIsDark(!isDark)}
               className="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 transition-all active:scale-90"
@@ -123,29 +122,12 @@ const Navbar = () => {
               {isDark ? <Sun size={20} strokeWidth={2.5} /> : <Moon size={20} strokeWidth={2.5} />}
             </button>
 
-            {/* Language Switch (Desktop) */}
-            <div className="hidden sm:flex bg-slate-100 dark:bg-white/5 p-1 rounded-full border border-slate-200/50 dark:border-white/10">
-               {['am', 'en'].map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => changeLanguage(lang)}
-                  className={`px-3 py-1.5 text-[10px] font-black rounded-full transition-all ${
-                    i18n.language === lang 
-                      ? "bg-white dark:bg-emerald-500 text-slate-900 dark:text-white shadow-sm" 
-                      : "text-slate-400 hover:text-slate-600"
-                  }`}
-                >
-                  {lang.toUpperCase()}
-                </button>
-              ))}
-            </div>
-
             {/* Mobile Menu Button */}
             <button 
-              className={`lg:hidden p-2.5 rounded-2xl transition-all ${isOpen ? 'bg-emerald-500 text-white shadow-emerald-500/40 rotate-90' : 'bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white'}`}
-              onClick={() => setIsOpen(!isOpen)}
+              className={`lg:hidden p-2.5 rounded-2xl transition-all ${isOpen ? 'bg-emerald-500 text-white rotate-90 scale-0 opacity-0' : 'bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white'}`}
+              onClick={() => setIsOpen(true)}
             >
-              {isOpen ? <X size={22} /> : <Menu size={22} />}
+              <Menu size={22} />
             </button>
           </div>
         </div>
@@ -159,11 +141,37 @@ const Navbar = () => {
             initial="closed"
             animate="opened"
             exit="closed"
-            className="lg:hidden fixed inset-0 bg-white dark:bg-[#0d0d0d] z-[105] flex flex-col p-8 pt-32"
+            className="lg:hidden fixed inset-0 bg-white dark:bg-[#0d0d0d] z-[150] flex flex-col p-8"
           >
+            {/* MOBILE HEADER (Always contains X and Dark Mode) */}
+            <div className="flex justify-between items-center w-full mb-12">
+              <div className="flex items-center gap-3">
+                <img src={logo} alt="Logo" className="w-10 h-10 rounded-full bg-white shadow-md p-1" />
+                <span className="font-black text-slate-900 dark:text-white uppercase tracking-tighter">
+                  {t("navbar.orgName")}
+                </span>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsDark(!isDark)}
+                  className="p-3 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300"
+                >
+                  {isDark ? <Sun size={22} /> : <Moon size={22} />}
+                </button>
+                
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="p-3 rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/40"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+            </div>
+
             {/* Decorative Background for Mobile Menu */}
-            <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full" />
+            <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full pointer-events-none" />
 
             <div className="flex flex-col gap-8 relative z-10">
               {navLinks.map((link) => (
@@ -184,7 +192,9 @@ const Navbar = () => {
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2 text-slate-400">
                     <Globe size={20} />
-                    <span className="text-xs font-black uppercase tracking-widest">{i18n.language === 'am' ? "ቋንቋ ይምረጡ" : "Choose Language"}</span>
+                    <span className="text-xs font-black uppercase tracking-widest">
+                      {i18n.language === 'am' ? "ቋንቋ" : "Language"}
+                    </span>
                   </div>
                   <div className="flex gap-4">
                     <button onClick={() => changeLanguage('am')} className={`text-xl font-black ${i18n.language === 'am' ? 'text-emerald-500' : 'text-slate-300'}`}>AM</button>
