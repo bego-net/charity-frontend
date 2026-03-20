@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Heart, Users, Calendar, ShieldCheck, Sparkles } from "lucide-react";

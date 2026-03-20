@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import "./App.css";

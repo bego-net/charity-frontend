@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll";
 import { useTranslation } from "react-i18next";
