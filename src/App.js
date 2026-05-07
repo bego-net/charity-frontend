@@ -1,4 +1,5 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./fonts.css";
 
@@ -16,7 +17,15 @@ import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
-function App() {
+// Admin (hidden)
+import AdminLogin from "./admin/AdminLogin";
+import AdminLayout from "./admin/AdminLayout";
+import AdminDashboard from "./admin/AdminDashboard";
+import AdminMessages from "./admin/AdminMessages";
+import ProtectedRoute from "./admin/ProtectedRoute";
+
+// Main website layout (unchanged)
+function MainSite() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#05070a] selection:bg-emerald-500/30">
       
@@ -71,6 +80,31 @@ function App() {
       {/* Footer */}
       <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      {/* Main website — exactly as before */}
+      <Route path="/" element={<MainSite />} />
+
+      {/* Hidden admin login */}
+      <Route path="/admin-login" element={<AdminLogin />} />
+
+      {/* Protected admin routes */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="messages" element={<AdminMessages />} />
+      </Route>
+    </Routes>
   );
 }
 

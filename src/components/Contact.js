@@ -24,7 +24,7 @@ const Contact = () => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language;
 
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null); 
 
@@ -46,7 +46,7 @@ const Contact = () => {
 
       if (response.ok) {
         setStatus("success");
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", phone: "", message: "" });
         setTimeout(() => setStatus(null), 6000);
       } else {
         setStatus("error");
@@ -120,6 +120,11 @@ const Contact = () => {
                     placeholder={currentLang === 'am' ? "ኢሜይል" : "Email Address"} required
                   />
                 </div>
+                <input
+                  type="tel" name="phone" value={formData.phone} onChange={handleChange}
+                  className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-colors"
+                  placeholder={currentLang === 'am' ? "ስልክ (አማራጭ)" : "Phone (optional)"}
+                />
                 <textarea
                   name="message" value={formData.message} onChange={handleChange} rows="3"
                   className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-slate-900 dark:text-white outline-none resize-none focus:border-emerald-500 transition-colors"
